@@ -21,6 +21,6 @@ class DatosExport implements FromArray, WithHeadings
 
     public function headings(): array
     {
-        return ['Fecha', 'Cantidad', 'Total'];
+        return ['Fecha',  'Total'];
     }
 }

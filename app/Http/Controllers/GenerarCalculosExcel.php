@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\TuImportador;
 use Carbon\Carbon;
-
+use Ramsey\Uuid\Type\Decimal;
 
 class GenerarCalculosExcel extends Controller
 {
@@ -54,10 +54,16 @@ class GenerarCalculosExcel extends Controller
         foreach ($sumadosPorFecha as $key => $value) {
             $datosFormated[] = [
                 "fecha" => $key,
-                "cantidad" => $value,
-                "total" => $value . "€",
+                // "cantidad" => $value,
+                "total" => round((float) $value, 2) . "€",
             ];
         }
+
+
+        $totalGeneral = array_sum(array_column($datosFormated, 'total'));
+
+        $datosFormated[] = ['',  ""];
+        $datosFormated[] = ['Total',  round((float) $totalGeneral, 2) . "€"];
 
         // Generar el archivo Excel utilizando el exportador
         return Excel::download(new DatosExport($datosFormated), $nombreArchivo);
